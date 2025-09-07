@@ -1,0 +1,679 @@
+/*==========GLOBAL==============*/
+
+:root {
+    --bg: #25212A;
+    --text: #F8F5F0;
+    --red: #E45B0A;  
+    --blue:#1D38B9;
+    --font-body: "Helvetica", "Arial", sans-serif;
+    --font-size-body: 18px;
+    --line-height-body: 1.6;
+  }
+  
+@font-face {
+    font-family: "NewYork";
+    src: url("assets/typefaces/new-york.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  /* paragraph spacing */
+p {
+    margin-bottom: 20px;
+  }
+
+/* was z-index: -1; height: 100%; */
+canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: -1;
+  pointer-events: none;  /* clicks still go to the page */
+}
+
+/* Header */
+.site-header {
+    position: relative;         /* ensure stacking */
+    z-index: 10;                /* above the canvas */
+    background: var(--bg);   /* solid background bar */
+    padding: 20px 24px;
+    font-family: "NewYork", serif; /* fallback serif */
+}
+
+  .site-header .inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .site-header .logo img {
+    height: 32px; width: auto; display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-header .logo:hover img {
+    content: url("assets/images/logo-red.png"); /* red logo on hover */
+  }
+
+  .site-header nav ul {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; gap: clamp(20px, 6vw, 56px);
+  }
+  .site-header nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color .2s ease;
+  }
+  .site-header nav a::after {
+    content: ""; position: absolute; left:0; right:0; bottom:0;
+    height: 2px; background: currentColor;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .22s ease;
+  }
+  .site-header nav a:hover { color: var(--red); }
+  .site-header nav a:hover::after { transform: scaleX(1); }
+  .site-header nav a[aria-current="page"] { color: var(--red); }
+  .site-header nav a[aria-current="page"]::after { transform: scaleX(1); }
+  
+/* Footer */
+.site-footer {
+    position: relative;         /* ensure stacking */
+    z-index: 20;                /* above the canvas */
+    background: var(--bg);   /* solid background bar */
+    padding: 40px 24px;
+    margin-top: 56px;
+    font-family: "NewYork", serif; /* fallback serif */
+}
+
+.site-footer .inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* nav | logo | tagline */
+  align-items: center;
+  gap: 24px;
+  z-index: 21;
+}
+
+.site-footer .footer-nav {
+  justify-self: start;
+}
+
+.site-footer .footer-logo {
+  justify-self: center; /* forces logo dead center */
+}
+
+.site-footer .footer-tagline {
+  justify-self: end;
+  text-align: right;
+}
+
+  .site-footer .footer-nav ul{
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .site-footer .footer-nav a{
+    color: var(--text); text-decoration: none; font-size: 16px;
+    transition: color .2s ease;
+  }
+  .site-footer .footer-nav a:hover{ color: var(--red); }
+  .site-footer .footer-logo img{ height: 40px; width:auto; display:block; }
+  .site-footer .footer-tagline{ font-size:14px; max-width:260px; text-align:right; }
+
+  /* Footer logo swap */
+.site-footer .footer-logo img {
+    content: url("assets/images/logo.png");   /* default */
+    transition: opacity 0.2s ease;
+  }
+  .site-footer .footer-logo:hover img {
+    content: url("assets/images/logo-red.png"); /* red on hover */
+  }
+
+  #animated-text-2 {
+    font-family: "NewYork", serif;
+    font-size: 16px;
+    color: white;
+    max-width: 260px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    border-right: 2px solid rgba(248,245,240,.7);
+    animation: blinkCursor .7s infinite;
+  }
+  @keyframes blinkCursor { 50% { border-color: transparent; } }
+  
+  
+  /* ======== HOME  =========*/
+
+  .bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;   /* ensures video fills screen */
+    z-index: -2;         /* sits behind everything */
+  }
+
+/* First text block (aligned right) */
+.instrucciones-container {
+    margin: 80px 40px 80px auto;  /* push to the right */
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 600px;
+    text-align: left;
+  }
+  
+  /* Second text block (aligned left) */
+ /* Wrapper: text left + button right */
+.instrucciones-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    margin: 80px 40px;
+  }
+  
+  /* Left column (text) */
+  .instrucciones-container-dos {
+    flex: 1;
+    max-width: 600px;
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: left;
+  }
+  
+  .instrucciones-container-dos p {
+    margin-bottom: 20px;
+  }
+  
+  /* Button on the right */
+  .btn-map {
+    display: inline-block;
+    background: var(--red);
+    color: var(--text);
+    font-family: "NewYork", serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px 150px;
+    border-radius: 30px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+    height: fit-content;
+    margin-top: 20px;
+  }
+  
+  /* Hover: use your "red-hovering" */
+  .btn-map:hover {
+    background: #E08D5D;  /* red - hovering */
+  }
+  
+  /* Arrow*/
+
+  .scroll-arrow {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .scroll-arrow img {
+    width: 40px;   /* adjust size */
+    height: auto;
+    cursor: pointer;
+    animation: bounce 2s infinite;
+  }
+  
+  /* Simple bounce animation */
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(8px);
+    }
+    60% {
+      transform: translateY(4px);
+    }
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }  
+
+  /* ======== WHAT TO DO?  =========*/
+
+  .whattodo {
+    max-width: 95%;
+    margin: 60px auto;
+    padding: 0 40px;
+  }  
+
+  .whattodo h2 {
+    font-family: "NewYork", serif;
+    font-size: 32px;  
+    font-weight: normal;
+    text-align: center;
+    margin: 40px auto 50px;  
+    line-height: 1.4;
+    color: var(--text);
+  }
+  
+.whattodo .steps-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* row 1: 3 columns */
+  gap: 50px 40px;
+  align-items: start;
+  margin: 32px 0;
+  padding: 32px 0;
+}
+
+.whattodo .steps-row:nth-of-type(2),
+.whattodo .steps-row:nth-of-type(3) {
+  grid-template-columns: repeat(2, 350px); /* each column 320px wide */
+  justify-content: center; /* center them in the row */
+  gap: 50px;
+}
+
+/* Each step: make the icon sit above the text */
+.whattodo .step {
+  display: grid !important;              /* override earlier flex */
+  grid-template-rows: auto 1fr;
+  gap: 15px;
+  text-align: left;
+}
+
+/* Icon: large and centered */
+.whattodo .step img {
+  width: 60px;                           
+  height: auto;
+  margin: 0 auto;                       
+  display: block;
+  margin-bottom: 20px;
+}
+
+/* Headings + lists */
+.whattodo .step h3 {
+  font-family: "NewYork", serif;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--red);
+}
+.whattodo .step ul {
+  list-style: disc;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .whattodo .steps-row { grid-template-columns: 1fr 1fr; }
+  .whattodo .steps-row:nth-of-type(2),
+  .whattodo .steps-row:nth-of-type(3) { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .whattodo .steps-row { grid-template-columns: 1fr; }
+  .whattodo .step img { width: 64px; }
+  .whattodo h2 { font-size: 20px; }
+}
+
+.map-button {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  margin: 40px 0;          /* optional: adds space above/below */
+}
+
+
+/*===============MAP===============*/
+
+#animated-text {
+  position: fixed;
+  top: 20%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+  font-family: "NewYork", serif;
+  color: var(--text);
+  font-size: 20px;
+  text-transform: uppercase;
+  /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta las letras que aún no han aparecido */
+  border-right: 3px solid, --text; /* Simula el cursor de escritura */
+  padding-right: 5px;
+  animation: blinkCursor 0.7s infinite;
+}
+
+/* Parpadeo del cursor */
+@keyframes blinkCursor {
+  50% {
+      border-color: transparent;
+  }
+}
+
+.container{
+  display:grid;
+  grid-template-columns: minmax(640px,1fr) 360px;  /* map | sidebar */
+  gap:24px;
+  padding: 24px 40px 40px;
+  align-items:start;
+  z-index: 4; 
+}
+
+
+/* Reset de estilos */
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+
+@media (max-width: 800px) {
+  .sidebar {
+      position: static;
+      width: 100%;
+      margin-top: 20px;
+  }
+}
+
+#map {
+  
+  flex: none; /* Evita que el mapa crezca demasiado */
+  width: 90%; 
+  height: 80vh; /* Hace que no ocupe toda la altura */
+  background-color: var(--bg);
+  border-radius: 8px; 
+ }
+
+.rightside{
+  position: sticky;
+  max-width:100%;
+
+}
+
+ .sidebar{
+  top: 96px;               /* distance from top (below header) */
+  align-self:start;
+  border:4px solid, var(--text);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* Barra de búsqueda */
+#searchBox{
+  width:100%;
+  padding:12px 14px;
+  font-size:16px;
+  border:1px solid, var(--text);
+  border-radius:50px;
+}
+
+/* Botón de búsqueda */
+#searchBtn {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  background: var(--red);
+  color: var(--text);
+  border-radius: 50px;
+  cursor: pointer;
+  border: none;
+  font-family: "NewYork", serif;
+  transition: 0.3s ease;
+}
+
+#searchBtn:hover,
+#searchBtn:active {
+  background: #E08D5D;  /* red - hovering */
+}
+
+/*  Street View */
+#street-view {
+  width: 100%;
+  height: 200px; /* Ajusta la altura */
+  background:var(--text);
+  border-radius: 50px;
+}
+
+/* Botón "Añadir Ubicación" */
+#addLocationBtn {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  background: var(--red);
+  color: var(--text);
+  border-radius: 50px;
+  cursor: pointer;
+  border: none;
+  font-family: "NewYork", serif;
+  transition: 0.3s ease;
+}
+
+#addLocationBtn:hover {
+  background: #E08D5D;  /* red - hovering */
+}
+
+/*  Estilo del botón "Eliminar Última Ubicación" */
+#removeLastMarkerBtn {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  background: var(--red);
+  color: var(--text);
+  border-radius: 50px;
+  cursor: pointer;
+  border: none;
+  font-family: "NewYork", serif;
+  transition: 0.3s ease;
+}
+
+#removeLastMarkerBtn:hover,
+#removeLastMarkerBtn:active {
+  background: #E08D5D;  /* red - hovering */
+
+}
+
+.btn-whattodo {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 18px;
+  font-family: "NewYork", serif;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--blue);        
+  border-radius: 50px;
+}
+
+.btn-whattodo:hover {
+  background: #6980ED;
+}
+
+
+/*  Estilos para la ventana emergente */
+
+.house-confetti {
+  position: fixed;
+  font-size: 30px;
+  animation: fall 1.5s linear forwards;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.modal{
+  display:none;                  /* hidden by default; JS sets to flex when opened */
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background: rgba(0,0,0,.50);   /* dim the page behind */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;                  /* safe area on small screens */
+}
+
+/* Contenido de la ventana */
+.modal-content{
+  position:relative;
+  width:min(560px, 92vw);
+  background:var(--bg);            /* deep charcoal */
+  color:var(--text);
+  border:3px solid, var(--text);
+  border-radius:40px;            /* big, soft corners */
+  padding:30px;
+  text-align:center;
+  
+}
+
+/* Title */
+.modal-content h2{
+  margin:0 0 14px;
+  font-family: "NewYork", serif;
+  font-size:22px;
+  font-weight:normal;
+  text-align:center;
+}
+
+/* Close “×” */
+.close-btn{
+  position:absolute;
+  top:10px;
+  right:14px;
+  font-size:40px;
+  line-height:1;
+  cursor:pointer;
+  color:var(--text);
+  transition:opacity .2s ease;
+}
+.close-btn:hover{ opacity:.65; }
+
+
+/* Input */
+#noteInput{
+  width:100%;
+  background:var(--text);
+  color:var(--bg);
+  font:16px/1.2 var(--font-body);
+  border:0;
+  border-radius:22px;            /* pill */
+  padding:14px 16px;
+  margin:6px 0 14px;
+}
+
+/* Save button */
+#saveNoteBtn{
+  display:block;
+  width:100%;
+  border:0;
+  border-radius:22px;            /* pill */
+  padding:12px 16px;
+  font:18px "NewYork", serif;
+  letter-spacing:.2px;
+  color:var(--text);
+  background:var(--red);
+  cursor:pointer;
+  transition:background .2s ease, transform .05s ease, opacity .2s ease;
+}
+#saveNoteBtn:hover{ background:#E08D5D; }
+#saveNoteBtn:active{ transform:translateY(1px); }
+
+/* Error dialog variant */
+.modal-content.error{
+  background:var(--bg);
+  color:var(--text);
+  border:3px solid, var(--text);
+  border-radius:24px;
+  width:min(520px, 92vw);
+  padding:22px 24px 20px;
+  text-align:center;
+}
+.modal-content.error h2{
+  font-family:"NewYork", serif;
+  margin:0 0 8px;
+  font-size:22px;
+  font-weight:normal;
+  letter-spacing:.5px;
+}
+.modal-content.error p{
+  margin:0 0 14px;
+  opacity:.9;
+  font-family: var(--font-body);
+  font-size:14px;
+}
+.modal-content.error #errorOkBtn{
+  display:block;
+  width:80%;
+  margin:0 auto;
+  border:0;
+  border-radius:22px;
+  padding:12px 16px;
+  font:18px "NewYork", serif;
+  color:var(--text);
+  background:var(--red);
+  cursor:pointer;
+  transition:background .2s ease, transform .05s ease;
+}
+.modal-content.error #errorOkBtn:hover{ background:#E08D5D; }
+.modal-content.error #errorOkBtn:active{ transform:translateY(1px); }
+
+/* Google Places Autocomplete dropdown */
+.pac-container {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--text);
+  background: var(--text);
+  color: var(--bg);
+  z-index: 99999; /* above map/sidebar */
+  font-family: var(--font-body);
+}
+
+.pac-item {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.pac-item:hover {
+  background: var(--text);
+}
+
+.pac-item .pac-icon {
+  display: none; /* cleaner look; hide tiny pin icon */
+}
+
+/* The matched text */
+.pac-item-query {
+  font-weight: 700;
+}
+
+/* Keep input’s rounded look consistent with your design */
+#searchBox {
+  background: var(--text);
+  color: var(--bg);
+  outline: none;
+}
